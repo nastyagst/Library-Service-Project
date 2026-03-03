@@ -1,0 +1,10 @@
+Django>=4.2,<5.0
+djangorestframework
+djangorestframework-simplejwt
+psycopg2-binary
+python-dotenv
+stripe
+celery
+redis
+drf-spectacular
+django-filter
