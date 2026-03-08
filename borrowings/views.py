@@ -7,6 +7,7 @@ from rest_framework import status
 
 from borrowings.models import Borrowing
 from borrowings.serializers import BorrowingSerializer
+from notifications import send_telegram_message
 
 
 class BorrowingViewSet(
@@ -26,7 +27,15 @@ class BorrowingViewSet(
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        borrowing = serializer.save(user=self.request.user)
+        message = (
+            f"<b>New Borrowing!</b>\n"
+            f"User: {borrowing.user.email}\n"
+            f"Book: {borrowing.book.title}\n"
+            f"Return date: {borrowing.expected_return_date}"
+        )
+
+        send_telegram_message(message)
 
     @action(methods=["POST"], detail=True, url_path="return")
     def return_borrowing(self, request, pk=None):
