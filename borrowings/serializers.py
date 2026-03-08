@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.db import transaction
 
 from borrowings.models import Borrowing
+from payments.utils import create_stripe_session
+from payments.models import Payment
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
@@ -30,4 +32,19 @@ class BorrowingSerializer(serializers.ModelSerializer):
             book = validated_data["book"]
             book.inventory -= 1
             book.save()
-            return super().create(validated_data)
+
+            borrowing = super().create(validated_data)
+
+            request = self.context.get("request")
+            session = create_stripe_session(borrowing, request)
+
+            Payment.objects.create(
+                status="PENDING",
+                type="PAYMENT",
+                borrowing=borrowing,
+                session_url=session.url,
+                session_id=session.id,
+                money_to_pay=borrowing.book.daily_fee,
+            )
+
+            return borrowing
