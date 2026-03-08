@@ -27,5 +27,31 @@ services:
       - db
       - redis
 
+  celery:
+    build: .
+    container_name: library_celery
+    command: >
+      sh -c "celery -A library_config worker -l info"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  celery-beat:
+    build: .
+    container_name: library_celery_beat
+    command: >
+      sh -c "celery -A library_config beat -l info"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
 volumes:
   postgres_data:
