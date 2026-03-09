@@ -21,10 +21,14 @@ class BorrowingViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        queryset = self.queryset
-        if not self.request.user.is_staff:
-            queryset = queryset.filter(user=self.request.user)
+        queryset = Borrowing.objects.all()
+        user = self.request.user
+
+        if not user.is_staff:
+            return queryset.filter(user=user)
+
         return queryset
+
 
     def perform_create(self, serializer):
         borrowing = serializer.save(user=self.request.user)
