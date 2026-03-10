@@ -21,15 +21,22 @@ class BorrowingApiTest(TestCase):
         )
         self.client.force_authenticate(self.user)
         self.book = Book.objects.create(
-            title="The Hobbit", author="J. R. R. Tolkien", inventory=12, daily_fee=2.0
+            title="The Hobbit",
+            author="J. R. R. Tolkien",
+            inventory=12,
+            daily_fee=2.0
         )
 
     def test_user_sees_only_own_borrowings(self):
         Borrowing.objects.create(
-            user=self.user, book=self.book, expected_return_date="2026-03-28"
+            user=self.user,
+            book=self.book,
+            expected_return_date="2026-03-28"
         )
         Borrowing.objects.create(
-            user=self.other_user, book=self.book, expected_return_date="2026-03-28"
+            user=self.other_user,
+            book=self.book,
+            expected_return_date="2026-03-28"
         )
 
         res = self.client.get(BORROWING_URL)
@@ -50,10 +57,7 @@ class BorrowingApiTest(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_borrowing_decreases_inventory(self):
-        payload = {
-            "book": self.book.id,
-            "expected_return_date": "2026-04-10"
-        }
+        payload = {"book": self.book.id, "expected_return_date": "2026-04-10"}
         res = self.client.post(BORROWING_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)

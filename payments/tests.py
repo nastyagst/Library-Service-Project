@@ -25,10 +25,14 @@ class PaymentApiTest(TestCase):
             title="Test", author="A", inventory=5, daily_fee=2.0
         )
         self.borrowing = Borrowing.objects.create(
-            user=self.user, book=self.book, expected_return_date="2026-03-20"
+            user=self.user,
+            book=self.book,
+            expected_return_date="2026-03-20"
         )
         self.other_borrowing = Borrowing.objects.create(
-            user=self.other_user, book=self.book, expected_return_date="2026-03-20"
+            user=self.other_user,
+            book=self.book,
+            expected_return_date="2026-03-20"
         )
 
     def test_user_sees_only_own_payments(self):

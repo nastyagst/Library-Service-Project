@@ -20,9 +20,9 @@ def check_overdue_borrowings():
 
     for borrowing in overdue_borrowings:
         message += (
-            f"<b>User:</b> {borrowing.user.email}\n"
-            f"<b>Book:</b> {borrowing.book.title}\n"
-            f"<b>Due date:</b> {borrowing.expected_return_date}\n"
+            f"<b>User: </b> {borrowing.user.email}\n"
+            f"<b>Book: </b> {borrowing.book.title}\n"
+            f"<b>Due date: </b> {borrowing.expected_return_date}\n"
             f"----------------------------\n"
         )
 

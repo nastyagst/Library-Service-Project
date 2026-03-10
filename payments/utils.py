@@ -8,9 +8,10 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def create_stripe_session(borrowing, request):
     total_price = borrowing.book.daily_fee * 100
 
-    success_url = request.build_absolute_uri(
-        reverse("payments:payment-success")
-    ) + "?session_id={CHECKOUT_SESSION_ID}"
+    success_url = (
+        request.build_absolute_uri(reverse("payments:payment-success"))
+        + "?session_id={CHECKOUT_SESSION_ID}"
+    )
     cancel_url = request.build_absolute_uri(reverse("payments:payment-cancel"))
 
     session = stripe.checkout.Session.create(
