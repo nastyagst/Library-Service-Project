@@ -29,7 +29,6 @@ class BorrowingViewSet(
 
         return queryset
 
-
     def perform_create(self, serializer):
         borrowing = serializer.save(user=self.request.user)
         message = (
@@ -57,4 +56,7 @@ class BorrowingViewSet(
         book.save()
         borrowing.save()
 
-        return Response(BorrowingSerializer(borrowing).data, status=status.HTTP_200_OK)
+        return Response(
+            BorrowingSerializer(borrowing).data,
+            status=status.HTTP_200_OK
+        )
